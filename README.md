@@ -3,7 +3,7 @@
 
 ## Install prerequisites
 
-Reference platform: Ubuntu 22.04 LTS or macOS Version 14.4.1
+Reference platform: Ubuntu 22.04 LTS or macOS Version 14
 
 Go 1.22.2: https://go.dev/dl/
 
@@ -56,8 +56,6 @@ for i in {2..31}; do sudo ifconfig lo0 -alias 127.0.0.$i; done
 
 ## Start SCION test network infrastructure
 
-### In 1-ff00:0:110:
-
 ```
 cd $SCION_TESTNET_PATH
 sudo killall router control daemon dispatcher > /dev/null
@@ -74,6 +72,7 @@ $SCION_PATH/bin/daemon --config gen/ASff00_0_112/sd.toml > logs/sd-ff00_0_112-1 
 $SCION_PATH/bin/dispatcher --config gen/dispatcher/disp.toml > logs/disp 2>&1 &
 ```
 
+
 ## Use SCION test network
 
 ### In 1-ff00:0:111:
@@ -89,5 +88,5 @@ $SCION_PATH/bin/scion --sciond 127.0.0.19:30255 ping --refresh 1-ff00:0:112,127.
 ```
 $SCION_PATH/bin/scion --sciond 127.0.0.27:30255 address
 $SCION_PATH/bin/scion --sciond 127.0.0.27:30255 showpaths -r --no-probe 1-ff00:0:111
-$SCION_PATH/bin/scion --sciond 127.0.0.19:30255 ping --refresh 1-ff00:0:111,127.0.0.18
+$SCION_PATH/bin/scion --sciond 127.0.0.27:30255 ping --refresh 1-ff00:0:111,127.0.0.18
 ```
