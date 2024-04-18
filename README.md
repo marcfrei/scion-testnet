@@ -58,7 +58,7 @@ for i in {2..31}; do sudo ifconfig lo0 -alias 127.0.0.$i; done
 
 ```
 cd $SCION_TESTNET_PATH
-sudo killall router control daemon dispatcher > /dev/null
+sudo killall router control daemon dispatcher 2> /dev/null
 $SCION_PATH/bin/router --config gen/ASff00_0_110/br1-ff00_0_110-1.toml > logs/br1-ff00_0_110-1 2>&1 &
 $SCION_PATH/bin/router --config gen/ASff00_0_110/br1-ff00_0_110-2.toml > logs/br1-ff00_0_110-2 2>&1 &
 $SCION_PATH/bin/control --config gen/ASff00_0_110/cs1-ff00_0_110-1.toml > logs/cs1-ff00_0_110-1 2>&1 &
