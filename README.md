@@ -38,7 +38,7 @@ mkdir logs gen-cache
 go run scion-cryptogen.go
 ```
 
-### On macOS
+### On macOS:
 
 ```
 for i in {2..31}; do sudo ifconfig lo0 alias 127.0.0.$i up; done
