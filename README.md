@@ -41,7 +41,7 @@ go run scion-cryptogen.go
 ### On macOS:
 
 ```
-for i in {2..31}; do sudo ifconfig lo0 alias 127.0.0.$i up; done
+for i in {2..63}; do sudo ifconfig lo0 alias 127.0.0.$i up; done
 ```
 
 This will add alias IP addresses to the loopback adapter.
@@ -49,8 +49,8 @@ This will add alias IP addresses to the loopback adapter.
 To later remove them again:
 
 ```
-for i in {2..31}; do sudo ifconfig lo0 alias 127.0.0.$i down; done
-for i in {2..31}; do sudo ifconfig lo0 -alias 127.0.0.$i; done
+for i in {2..63}; do sudo ifconfig lo0 alias 127.0.0.$i down; done
+for i in {2..63}; do sudo ifconfig lo0 -alias 127.0.0.$i; done
 ```
 
 
@@ -61,12 +61,16 @@ cd $SCION_TESTNET_PATH
 sudo killall router control daemon dispatcher 2> /dev/null
 $SCION_PATH/bin/router --config gen/ASff00_0_110/br1-ff00_0_110-1.toml > logs/br1-ff00_0_110-1 2>&1 &
 $SCION_PATH/bin/router --config gen/ASff00_0_110/br1-ff00_0_110-2.toml > logs/br1-ff00_0_110-2 2>&1 &
+$SCION_PATH/bin/router --config gen/ASff00_0_110/br1-ff00_0_110-3.toml > logs/br1-ff00_0_110-3 2>&1 &
+$SCION_PATH/bin/router --config gen/ASff00_0_110/br1-ff00_0_110-4.toml > logs/br1-ff00_0_110-4 2>&1 &
 $SCION_PATH/bin/control --config gen/ASff00_0_110/cs1-ff00_0_110-1.toml > logs/cs1-ff00_0_110-1 2>&1 &
 $SCION_PATH/bin/daemon --config gen/ASff00_0_110/sd.toml > logs/sd-ff00_0_110-1 2>&1 &
 $SCION_PATH/bin/router --config gen/ASff00_0_111/br1-ff00_0_111-1.toml > logs/br1-ff00_0_111-1 2>&1 &
+$SCION_PATH/bin/router --config gen/ASff00_0_111/br1-ff00_0_111-2.toml > logs/br1-ff00_0_111-2 2>&1 &
 $SCION_PATH/bin/control --config gen/ASff00_0_111/cs1-ff00_0_111-1.toml > logs/cs1-ff00_0_111-1 2>&1 &
 $SCION_PATH/bin/daemon --config gen/ASff00_0_111/sd.toml > logs/sd-ff00_0_111-1 2>&1 &
 $SCION_PATH/bin/router --config gen/ASff00_0_112/br1-ff00_0_112-1.toml > logs/br1-ff00_0_112-1 2>&1 &
+$SCION_PATH/bin/router --config gen/ASff00_0_112/br1-ff00_0_112-2.toml > logs/br1-ff00_0_112-2 2>&1 &
 $SCION_PATH/bin/control --config gen/ASff00_0_112/cs1-ff00_0_112-1.toml > logs/cs1-ff00_0_112-1 2>&1 &
 $SCION_PATH/bin/daemon --config gen/ASff00_0_112/sd.toml > logs/sd-ff00_0_112-1 2>&1 &
 $SCION_PATH/bin/dispatcher --config gen/dispatcher/disp.toml > logs/disp 2>&1 &
@@ -78,15 +82,15 @@ $SCION_PATH/bin/dispatcher --config gen/dispatcher/disp.toml > logs/disp 2>&1 &
 ### In 1-ff00:0:111:
 
 ```
-$SCION_PATH/bin/scion --sciond 127.0.0.19:30255 address
-$SCION_PATH/bin/scion --sciond 127.0.0.19:30255 showpaths -r --no-probe 1-ff00:0:112
-$SCION_PATH/bin/scion --sciond 127.0.0.19:30255 ping --refresh 1-ff00:0:112,127.0.0.26
+$SCION_PATH/bin/scion --sciond 127.0.0.36:30255 address
+$SCION_PATH/bin/scion --sciond 127.0.0.36:30255 showpaths -r --no-probe 1-ff00:0:112
+$SCION_PATH/bin/scion --sciond 127.0.0.36:30255 ping --refresh 1-ff00:0:112,127.0.0.43
 ```
 
 ### In 1-ff00:0:112:
 
 ```
-$SCION_PATH/bin/scion --sciond 127.0.0.27:30255 address
-$SCION_PATH/bin/scion --sciond 127.0.0.27:30255 showpaths -r --no-probe 1-ff00:0:111
-$SCION_PATH/bin/scion --sciond 127.0.0.27:30255 ping --refresh 1-ff00:0:111,127.0.0.18
+$SCION_PATH/bin/scion --sciond 127.0.0.44:30255 address
+$SCION_PATH/bin/scion --sciond 127.0.0.44:30255 showpaths -r --no-probe 1-ff00:0:111
+$SCION_PATH/bin/scion --sciond 127.0.0.44:30255 ping --refresh 1-ff00:0:111,127.0.0.35
 ```

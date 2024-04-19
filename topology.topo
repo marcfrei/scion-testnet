@@ -12,4 +12,6 @@ ASes:
     cert_issuer: 1-ff00:0:110
 links:
   - {a: "1-ff00:0:110#1", b: "1-ff00:0:111#41", linkAtoB: CHILD, mtu: 1280}
-  - {a: "1-ff00:0:110#2", b: "1-ff00:0:112#1", linkAtoB: CHILD, bw: 500}
+  - {a: "1-ff00:0:110#2", b: "1-ff00:0:111#42", linkAtoB: CHILD, mtu: 1280}
+  - {a: "1-ff00:0:110#3", b: "1-ff00:0:112#51", linkAtoB: CHILD, mtu: 1280}
+  - {a: "1-ff00:0:110#4", b: "1-ff00:0:112#52", linkAtoB: CHILD, mtu: 1280}
