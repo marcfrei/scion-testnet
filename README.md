@@ -5,7 +5,7 @@
 
 Reference platform: Ubuntu 22.04 LTS or macOS Version 14
 
-Go 1.22.2: https://go.dev/dl/
+Go 1.22.3: https://go.dev/dl/
 
 
 ## Set up SCION test environment
@@ -14,13 +14,10 @@ Go 1.22.2: https://go.dev/dl/
 export SCION_PATH=$(pwd)/scion
 export SCION_TESTNET_PATH=$(pwd)/scion-testnet
 
-git clone https://github.com/jordisubira/scion.git
+git clone https://github.com/scionproto/scion.git
 git clone https://github.com/marcfrei/scion-testnet.git
 
 cd $SCION_PATH
-git checkout dispatcher_off
-git apply $SCION_TESTNET_PATH/upstream.patch.0
-git apply $SCION_TESTNET_PATH/upstream.patch.1
 go build -o ./bin/ ./control/cmd/control
 go build -o ./bin/ ./daemon/cmd/daemon
 go build -o ./bin/ ./dispatcher/cmd/dispatcher

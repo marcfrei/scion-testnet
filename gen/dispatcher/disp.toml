@@ -1,6 +1,6 @@
 [dispatcher]
 id = "dispatcher"
-underlay_addr = "[::]:30041"
+underlay_addr = "::"
 
 [metrics]
 prometheus = "[127.0.0.1]:30441"
