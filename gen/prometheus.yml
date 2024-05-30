@@ -7,20 +7,59 @@ scrape_configs:
 - file_sd_configs:
   - files:
     - ASff00_0_110/prometheus/br.yml
+    - ASff00_0_120/prometheus/br.yml
+    - ASff00_0_130/prometheus/br.yml
     - ASff00_0_111/prometheus/br.yml
     - ASff00_0_112/prometheus/br.yml
+    - ASff00_0_121/prometheus/br.yml
+    - ASff00_0_122/prometheus/br.yml
+    - ASff00_0_131/prometheus/br.yml
+    - ASff00_0_132/prometheus/br.yml
+    - ASff00_0_133/prometheus/br.yml
+    - ASff00_0_210/prometheus/br.yml
+    - ASff00_0_220/prometheus/br.yml
+    - ASff00_0_211/prometheus/br.yml
+    - ASff00_0_212/prometheus/br.yml
+    - ASff00_0_221/prometheus/br.yml
+    - ASff00_0_222/prometheus/br.yml
   job_name: BR
 - file_sd_configs:
   - files:
     - ASff00_0_110/prometheus/cs.yml
+    - ASff00_0_120/prometheus/cs.yml
+    - ASff00_0_130/prometheus/cs.yml
     - ASff00_0_111/prometheus/cs.yml
     - ASff00_0_112/prometheus/cs.yml
+    - ASff00_0_121/prometheus/cs.yml
+    - ASff00_0_122/prometheus/cs.yml
+    - ASff00_0_131/prometheus/cs.yml
+    - ASff00_0_132/prometheus/cs.yml
+    - ASff00_0_133/prometheus/cs.yml
+    - ASff00_0_210/prometheus/cs.yml
+    - ASff00_0_220/prometheus/cs.yml
+    - ASff00_0_211/prometheus/cs.yml
+    - ASff00_0_212/prometheus/cs.yml
+    - ASff00_0_221/prometheus/cs.yml
+    - ASff00_0_222/prometheus/cs.yml
   job_name: CS
 - file_sd_configs:
   - files:
     - ASff00_0_110/prometheus/sd.yml
+    - ASff00_0_120/prometheus/sd.yml
+    - ASff00_0_130/prometheus/sd.yml
     - ASff00_0_111/prometheus/sd.yml
     - ASff00_0_112/prometheus/sd.yml
+    - ASff00_0_121/prometheus/sd.yml
+    - ASff00_0_122/prometheus/sd.yml
+    - ASff00_0_131/prometheus/sd.yml
+    - ASff00_0_132/prometheus/sd.yml
+    - ASff00_0_133/prometheus/sd.yml
+    - ASff00_0_210/prometheus/sd.yml
+    - ASff00_0_220/prometheus/sd.yml
+    - ASff00_0_211/prometheus/sd.yml
+    - ASff00_0_212/prometheus/sd.yml
+    - ASff00_0_221/prometheus/sd.yml
+    - ASff00_0_222/prometheus/sd.yml
   job_name: SD
 - file_sd_configs:
   - files:
