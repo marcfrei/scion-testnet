@@ -5,7 +5,7 @@
 
 Reference platform: Ubuntu 22.04 LTS or macOS Version 14
 
-Go 1.22.3: https://go.dev/dl/
+Go 1.22.4: https://go.dev/dl/
 
 
 ## Set up SCION test environment
@@ -70,3 +70,17 @@ $SCION_PATH/bin/scion --sciond 127.0.0.212:30255 showpaths -r --no-probe 1-ff00:
 $SCION_PATH/bin/scion --sciond 127.0.0.212:30255 ping --refresh 1-ff00:0:133,127.0.0.1
 ```
 
+
+## Try test programs
+
+In 1st session:
+
+```
+go run test-server.go -local 1-ff00:0:133,127.0.0.148:31000
+```
+
+In 2nd session:
+
+```
+go run test-client.go -daemon 127.0.0.212:30255 -local 2-ff00:0:222,127.0.0.212:31000 -remote 1-ff00:0:133,127.0.0.148:31000 -data "abc"
+```
