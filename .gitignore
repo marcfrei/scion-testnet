@@ -7,3 +7,6 @@
 /gen/ISD2
 /gen/trcs
 /logs
+/scion-cryptogen
+/test-client
+/test-server
