@@ -1,11 +1,10 @@
 /gen-cache
-/gen/*/certs
-/gen/*/crypto
-/gen/*/keys
-/gen/certs
-/gen/ISD1
-/gen/ISD2
-/gen/trcs
+/topos/default/*/certs
+/topos/default/*/crypto
+/topos/default/*/keys
+/topos/default/*/trcs
+/topos/default/certs
+/topos/default/trcs
 /logs
 /scion-cryptogen
 /test-client

@@ -5,7 +5,7 @@
 
 Reference platform: Ubuntu 22.04 LTS or macOS Version 14
 
-Go 1.22.4: https://go.dev/dl/
+Go 1.23: https://go.dev/dl/
 
 
 ## Set up SCION test environment
@@ -32,7 +32,7 @@ cd $SCION_TESTNET_PATH
 rm -rf logs gen-cache
 mkdir logs gen-cache
 
-go run scion-cryptogen.go
+go run scion-cryptogen.go topos/default
 ```
 
 ### On macOS:
@@ -56,7 +56,7 @@ for i in {2..255}; do sudo ifconfig lo0 -alias 127.0.0.$i; done
 ```
 cd $SCION_TESTNET_PATH
 sudo killall router control daemon dispatcher 2> /dev/null
-./run.sh
+./run-default.sh
 ```
 
 
@@ -67,7 +67,7 @@ See [test topology](https://github.com/scionproto/scion/blob/master/doc/fig/defa
 ```
 $SCION_PATH/bin/scion --sciond 127.0.0.212:30255 address
 $SCION_PATH/bin/scion --sciond 127.0.0.212:30255 showpaths -r --no-probe 1-ff00:0:133
-$SCION_PATH/bin/scion --sciond 127.0.0.212:30255 ping --refresh 1-ff00:0:133,127.0.0.1
+$SCION_PATH/bin/scion --sciond 127.0.0.212:30255 ping --refresh -c 7 1-ff00:0:133,127.0.0.1
 ```
 
 

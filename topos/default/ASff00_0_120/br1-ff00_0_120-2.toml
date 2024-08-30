@@ -1,0 +1,14 @@
+[general]
+id = "br1-ff00_0_120-2"
+config_dir = "topos/default/ASff00_0_120"
+
+[metrics]
+prometheus = "127.0.0.90:30442"
+
+[features]
+
+[api]
+addr = "127.0.0.90:31142"
+
+[log.console]
+level = "debug"
