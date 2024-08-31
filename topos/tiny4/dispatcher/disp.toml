@@ -1,0 +1,22 @@
+[dispatcher]
+id = "dispatcher"
+local_udp_forwarding = true
+
+[metrics]
+prometheus = "[127.0.0.1]:30441"
+
+[features]
+
+[api]
+addr = "[127.0.0.1]:31141"
+
+[dispatcher.service_addresses]
+"1-ff00:0:110,CS" = "127.0.0.11:31000"
+"1-ff00:0:110,DS" = "127.0.0.11:31000"
+"1-ff00:0:111,CS" = "127.0.0.18:31006"
+"1-ff00:0:111,DS" = "127.0.0.18:31006"
+"1-ff00:0:112,CS" = "127.0.0.26:31010"
+"1-ff00:0:112,DS" = "127.0.0.26:31010"
+
+[log.console]
+level = "debug"
