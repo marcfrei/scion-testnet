@@ -25,7 +25,72 @@ go build -o ./bin/ ./router/cmd/router
 go build -o ./bin/ ./scion/cmd/scion
 ```
 
+
 ## Prepare SCION test network
+
+```
+cd $SCION_TESTNET_PATH
+rm -rf logs gen-cache
+mkdir logs gen-cache
+
+go run scion-cryptogen.go topos/tiny4
+```
+
+### On macOS:
+
+```
+for i in {2..31}; do sudo ifconfig lo0 alias 127.0.0.$i up; done
+```
+
+This will add alias IP addresses to the loopback adapter.
+
+To later remove them again:
+
+```
+for i in {2..31}; do sudo ifconfig lo0 alias 127.0.0.$i down; done
+for i in {2..31}; do sudo ifconfig lo0 -alias 127.0.0.$i; done
+```
+
+
+## Start SCION test network infrastructure
+
+```
+cd $SCION_TESTNET_PATH
+sudo killall router control daemon dispatcher 2> /dev/null
+./run-tiny4.sh
+```
+
+
+## Use SCION test network
+
+```
+$SCION_PATH/bin/scion --sciond 127.0.0.19:30255 address
+$SCION_PATH/bin/scion --sciond 127.0.0.19:30255 showpaths -r --no-probe 1-ff00:0:112
+$SCION_PATH/bin/scion --sciond 127.0.0.19:30255 ping --refresh -c 7 1-ff00:0:112,127.0.0.1
+```
+
+
+## Try test programs
+
+In 1st session:
+
+```
+go run test-server.go -local 1-ff00:0:112,127.0.0.27:31000
+```
+
+In 2nd session:
+
+```
+go run test-client.go -daemon 127.0.0.19:30255 -local 1-ff00:0:111,127.0.0.19:31000 -remote 1-ff00:0:112,127.0.0.27:31000 -data "abc"
+```
+
+
+## Using a larger test topology
+
+To use the larger [default test topology](https://github.com/scionproto/scion/blob/master/doc/fig/default_topo.png), apply the following changes:
+
+
+### Prepare SCION test network
 
 ```
 cd $SCION_TESTNET_PATH
@@ -35,7 +100,9 @@ mkdir logs gen-cache
 go run scion-cryptogen.go topos/default
 ```
 
-### On macOS:
+#### On macOS:
+
+Set up and tear down more loopback addresses.
 
 ```
 for i in {2..255}; do sudo ifconfig lo0 alias 127.0.0.$i up; done
@@ -51,7 +118,7 @@ for i in {2..255}; do sudo ifconfig lo0 -alias 127.0.0.$i; done
 ```
 
 
-## Start SCION test network infrastructure
+### Start SCION test network infrastructure
 
 ```
 cd $SCION_TESTNET_PATH
@@ -60,9 +127,7 @@ sudo killall router control daemon dispatcher 2> /dev/null
 ```
 
 
-## Use SCION test network
-
-See [test topology](https://github.com/scionproto/scion/blob/master/doc/fig/default_topo.png)
+### Use SCION test network
 
 ```
 $SCION_PATH/bin/scion --sciond 127.0.0.212:30255 address
@@ -71,7 +136,7 @@ $SCION_PATH/bin/scion --sciond 127.0.0.212:30255 ping --refresh -c 7 1-ff00:0:13
 ```
 
 
-## Try test programs
+### Try test programs
 
 In 1st session:
 
