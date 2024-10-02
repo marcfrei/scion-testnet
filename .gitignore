@@ -5,6 +5,12 @@
 /topos/default/*/trcs
 /topos/default/certs
 /topos/default/trcs
+/topos/tiny4/*/certs
+/topos/tiny4/*/crypto
+/topos/tiny4/*/keys
+/topos/tiny4/*/trcs
+/topos/tiny4/certs
+/topos/tiny4/trcs
 /logs
 /scion-cryptogen
 /test-client
