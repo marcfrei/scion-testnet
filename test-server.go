@@ -15,7 +15,7 @@ func main() {
 
 	conn, err := net.ListenUDP("udp", localAddr.Host)
 	if err != nil {
-		log.Fatal("Failed to listen on UDP connection: %v\n", err)
+		log.Fatalf("Failed to listen on UDP connection: %v", err)
 	}
 	defer conn.Close()
 
@@ -25,25 +25,25 @@ func main() {
 
 		n, lastHop, err := conn.ReadFrom(pkt.Bytes)
 		if err != nil {
-			log.Printf("Failed to read packet: %v\n", err)
+			log.Printf("Failed to read packet: %v", err)
 			continue
 		}
 		pkt.Bytes = pkt.Bytes[:n]
 
 		err = pkt.Decode()
 		if err != nil {
-			log.Printf("Failed to decode packet: %v\n", err)
+			log.Printf("Failed to decode packet: %v", err)
 			continue
 		}
 
 		pld, ok := pkt.Payload.(snet.UDPPayload)
 		if !ok {
-			log.Printf("Failed to read packet payload\n")
+			log.Printf("Failed to read packet payload")
 			continue
 		}
 
 		if int(pld.DstPort) == localAddr.Host.Port {
-			log.Printf("Received data: \"%v\"\n", string(pld.Payload))
+			log.Printf("Received data: \"%v\"", string(pld.Payload))
 
 			pkt.Destination, pkt.Source = pkt.Source, pkt.Destination
 
@@ -68,13 +68,13 @@ func main() {
 
 			err = pkt.Serialize()
 			if err != nil {
-				log.Printf("Failed to serialize SCION packet: %v\n", err)
+				log.Printf("Failed to serialize SCION packet: %v", err)
 				continue
 			}
 
 			_, err = conn.WriteTo(pkt.Bytes, lastHop)
 			if err != nil {
-				log.Printf("Failed to write packet: %v\n", err)
+				log.Printf("Failed to write packet: %v", err)
 				continue
 			}
 		}
