@@ -86,7 +86,7 @@ func main() {
 	}
 
 	nextHop := sp.UnderlayNextHop()
-	if nextHop == nil && remoteAddr.IA.Equal(localAddr.IA) {
+	if nextHop == nil && remoteAddr.IA == localAddr.IA {
 		nextHop = remoteAddr.Host
 	}
 
