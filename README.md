@@ -7,6 +7,9 @@ Reference platform: Ubuntu 22.04 LTS or macOS Version 14
 
 Go 1.23: https://go.dev/dl/
 
+### Windows
+
+Currently SCION is not supported on Windows, hence using WSL is recommended.
 
 ## Set up SCION test environment
 
@@ -49,6 +52,20 @@ To later remove them again:
 ```
 for i in {2..31}; do sudo ifconfig lo0 alias 127.0.0.$i down; done
 for i in {2..31}; do sudo ifconfig lo0 -alias 127.0.0.$i; done
+```
+
+### On Linux
+
+```
+for i in {2..31}; do sudo ifconfig lo:$i 127.0.0.$i up; done
+```
+
+This will add alias IP addresses to the loopback adapter (assuming your loopback adapter is called `lo`).
+
+To later remove them again:
+
+```
+for i in {2..31}; do sudo ifconfig lo:$i 127.0.0.$i down; done
 ```
 
 
@@ -116,7 +133,19 @@ To later remove them again:
 for i in {2..255}; do sudo ifconfig lo0 alias 127.0.0.$i down; done
 for i in {2..255}; do sudo ifconfig lo0 -alias 127.0.0.$i; done
 ```
+#### On Linux
 
+```
+for i in {2..255}; do sudo ifconfig lo:$i 127.0.0.$i up; done
+```
+
+This will add alias IP addresses to the loopback adapter (assuming your loopback adapter is called `lo`).
+
+To later remove them again:
+
+```
+for i in {2..255}; do sudo ifconfig lo:$i 127.0.0.$i down; done
+```
 
 ### Start SCION test network infrastructure
 
