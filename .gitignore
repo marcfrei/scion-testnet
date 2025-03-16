@@ -1,4 +1,8 @@
 /gen-cache
+/logs
+/scion-testnet
+/test-client
+/test-server
 /topos/default/*/certs
 /topos/default/*/crypto
 /topos/default/*/keys
@@ -11,7 +15,3 @@
 /topos/tiny4/*/trcs
 /topos/tiny4/certs
 /topos/tiny4/trcs
-/logs
-/scion-cryptogen
-/test-client
-/test-server

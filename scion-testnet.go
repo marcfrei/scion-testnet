@@ -56,9 +56,8 @@ func ifconfigCommand(args []string) {
 		os.Exit(1)
 	}
 
-	// Parse flags
 	ifconfigFlags := flag.NewFlagSet("ifconfig", flag.ExitOnError)
-	clean := ifconfigFlags.Bool("c", false, "clean (remove) IP addresses from interfaces")
+	clean := ifconfigFlags.Bool("c", false, "clean (remove) IP addresses from loopback interface")
 
 	err := ifconfigFlags.Parse(args)
 	if err != nil {
@@ -89,10 +88,9 @@ func ifconfigCommand(args []string) {
 	for ip := range ipAddrs {
 		parsedIP := net.ParseIP(ip)
 		if parsedIP == nil {
-			fmt.Printf("Warning: Invalid IP address format: %s\n", ip)
+			fmt.Printf("Warning: Unexpected IP address format: %s\n", ip)
 			continue
 		}
-
 		if parsedIP.To4() != nil {
 			ipv4Addresses = append(ipv4Addresses, ip)
 			ipv4Count++
@@ -103,7 +101,6 @@ func ifconfigCommand(args []string) {
 	}
 
 	if *clean {
-		fmt.Printf("Removing %d IPv4 addresses and %d IPv6 addresses\n", ipv4Count, ipv6Count)
 		switch runtime.GOOS {
 		case "darwin":
 			removeIPsDarwin(ipv4Addresses, ipv6Addresses)
@@ -114,12 +111,11 @@ func ifconfigCommand(args []string) {
 			os.Exit(1)
 		}
 	} else {
-		fmt.Printf("Adding %d IPv4 addresses and %d IPv6 addresses\n", ipv4Count, ipv6Count)
 		switch runtime.GOOS {
 		case "darwin":
-			ifconfigDarwin(ipv4Addresses, ipv6Addresses)
+			addIPsDarwin(ipv4Addresses, ipv6Addresses)
 		case "linux":
-			ifconfigLinux(ipv4Addresses, ipv6Addresses)
+			addIPsLinux(ipv4Addresses, ipv6Addresses)
 		default:
 			fmt.Printf("Unsupported operating system: %s\n", runtime.GOOS)
 			os.Exit(1)
@@ -130,11 +126,9 @@ func ifconfigCommand(args []string) {
 func checkPrivileges() bool {
 	cmd := exec.Command("id", "-u")
 	output, err := cmd.Output()
-
 	if err != nil {
 		return false
 	}
-
 	return string(output[:len(output)-1]) == "0"
 }
 
@@ -164,20 +158,19 @@ func parseNetworksConfig(networksFile string) map[string]bool {
 		}
 	}
 	if err := scanner.Err(); err != nil {
-		fmt.Printf("Error reading networks.conf: %v\n", err)
+		fmt.Printf("Failed to read networks.conf: %v\n", err)
 		os.Exit(1)
 	}
 
 	return ipAddresses
 }
 
-func ifconfigLinux(ipv4Addresses, ipv6Addresses []string) {
+func addIPsLinux(ipv4Addresses, ipv6Addresses []string) {
 	for _, ip := range ipv4Addresses {
 		cidr := ip
 		if !strings.Contains(ip, "/") {
 			cidr = ip + "/32"
 		}
-
 		cmd := exec.Command("ip", "addr", "add", cidr, "dev", "lo")
 		if err := cmd.Run(); err != nil {
 			fmt.Printf("Warning: Failed to add IPv4 address %s: %v\n", ip, err)
@@ -185,13 +178,11 @@ func ifconfigLinux(ipv4Addresses, ipv6Addresses []string) {
 			fmt.Printf("Added IPv4 address %s to loopback interface\n", ip)
 		}
 	}
-
 	for _, ip := range ipv6Addresses {
 		cidr := ip
 		if !strings.Contains(ip, "/") {
 			cidr = ip + "/128"
 		}
-
 		cmd := exec.Command("ip", "addr", "add", cidr, "dev", "lo")
 		if err := cmd.Run(); err != nil {
 			fmt.Printf("Warning: Failed to add IPv6 address %s: %v\n", ip, err)
@@ -207,7 +198,6 @@ func removeIPsLinux(ipv4Addresses, ipv6Addresses []string) {
 		if !strings.Contains(ip, "/") {
 			cidr = ip + "/32"
 		}
-
 		cmd := exec.Command("ip", "addr", "del", cidr, "dev", "lo")
 		if err := cmd.Run(); err != nil {
 			fmt.Printf("Warning: Failed to remove IPv4 address %s: %v\n", ip, err)
@@ -215,13 +205,11 @@ func removeIPsLinux(ipv4Addresses, ipv6Addresses []string) {
 			fmt.Printf("Removed IPv4 address %s from loopback interface\n", ip)
 		}
 	}
-
 	for _, ip := range ipv6Addresses {
 		cidr := ip
 		if !strings.Contains(ip, "/") {
 			cidr = ip + "/128"
 		}
-
 		cmd := exec.Command("ip", "addr", "del", cidr, "dev", "lo")
 		if err := cmd.Run(); err != nil {
 			fmt.Printf("Warning: Failed to remove IPv6 address %s: %v\n", ip, err)
@@ -231,13 +219,12 @@ func removeIPsLinux(ipv4Addresses, ipv6Addresses []string) {
 	}
 }
 
-func ifconfigDarwin(ipv4Addresses, ipv6Addresses []string) {
+func addIPsDarwin(ipv4Addresses, ipv6Addresses []string) {
 	for _, ip := range ipv4Addresses {
 		ipOnly := ip
 		if strings.Contains(ip, "/") {
 			ipOnly = strings.Split(ip, "/")[0]
 		}
-
 		cmd := exec.Command("ifconfig", "lo0", "alias", ipOnly)
 		if err := cmd.Run(); err != nil {
 			fmt.Printf("Warning: Failed to add IPv4 address %s: %v\n", ip, err)
@@ -245,7 +232,6 @@ func ifconfigDarwin(ipv4Addresses, ipv6Addresses []string) {
 			fmt.Printf("Added IPv4 address %s to loopback interface\n", ip)
 		}
 	}
-
 	for _, ip := range ipv6Addresses {
 		ipOnly := ip
 		prefixLen := "128"
@@ -256,7 +242,6 @@ func ifconfigDarwin(ipv4Addresses, ipv6Addresses []string) {
 				prefixLen = parts[1]
 			}
 		}
-
 		cmd := exec.Command("ifconfig", "lo0", "inet6", ipOnly, "prefixlen", prefixLen, "alias")
 		if err := cmd.Run(); err != nil {
 			fmt.Printf("Warning: Failed to add IPv6 address %s: %v\n", ip, err)
@@ -272,7 +257,6 @@ func removeIPsDarwin(ipv4Addresses, ipv6Addresses []string) {
 		if strings.Contains(ip, "/") {
 			ipOnly = strings.Split(ip, "/")[0]
 		}
-
 		cmd := exec.Command("ifconfig", "lo0", "-alias", ipOnly)
 		if err := cmd.Run(); err != nil {
 			fmt.Printf("Warning: Failed to remove IPv4 address %s: %v\n", ip, err)
@@ -280,13 +264,11 @@ func removeIPsDarwin(ipv4Addresses, ipv6Addresses []string) {
 			fmt.Printf("Removed IPv4 address %s from loopback interface\n", ip)
 		}
 	}
-
 	for _, ip := range ipv6Addresses {
 		ipOnly := ip
 		if strings.Contains(ip, "/") {
 			ipOnly = strings.Split(ip, "/")[0]
 		}
-
 		cmd := exec.Command("ifconfig", "lo0", "inet6", ipOnly, "-alias")
 		if err := cmd.Run(); err != nil {
 			fmt.Printf("Warning: Failed to remove IPv6 address %s: %v\n", ip, err)
@@ -537,7 +519,6 @@ func processDirectory(scionPath, dirPath string) []*exec.Cmd {
 			} else if strings.HasPrefix(filename, "disp") {
 				serviceType = "dispatcher"
 			} else {
-				// Skip files that don't match expected prefixes
 				continue
 			}
 
