@@ -1,12 +1,12 @@
 [general]
-id = "sd1-ff00_0_131"
-config_dir = "topos/default/ASff00_0_131"
+id = "sd2-ff00_0_221"
+config_dir = "topos/default/ASff00_0_221"
 
 [trust_db]
-connection = "gen-cache/sd1-ff00_0_131.trust.db"
+connection = "gen-cache/sd2-ff00_0_221.trust.db"
 
 [path_db]
-connection = "gen-cache/sd1-ff00_0_131.path.db"
+connection = "gen-cache/sd2-ff00_0_221.path.db"
 
 [sd]
 address = "127.0.0.133:30255"

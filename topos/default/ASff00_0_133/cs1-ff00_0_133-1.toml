@@ -17,10 +17,10 @@ debug = true
 agent = "0.0.0.0:6831"
 
 [metrics]
-prometheus = "127.0.0.147:30452"
+prometheus = "127.0.0.99:30452"
 
 [api]
-addr = "127.0.0.147:31152"
+addr = "127.0.0.99:31152"
 
 [features]
 

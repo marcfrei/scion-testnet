@@ -9,7 +9,7 @@ connection = "gen-cache/sd1-ff00_0_110.trust.db"
 connection = "gen-cache/sd1-ff00_0_110.path.db"
 
 [sd]
-address = "127.0.0.69:30255"
+address = "[fd00:f00d:cafe::7f00:15]:30255"
 
 [tracing]
 enabled = true
@@ -17,12 +17,12 @@ debug = true
 agent = "0.0.0.0:6831"
 
 [metrics]
-prometheus = "127.0.0.69:30455"
+prometheus = "[fd00:f00d:cafe::7f00:15]:30455"
 
 [features]
 
 [api]
-addr = "127.0.0.69:30955"
+addr = "[fd00:f00d:cafe::7f00:15]:30955"
 
 [log.console]
 level = "debug"

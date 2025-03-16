@@ -5,7 +5,7 @@
 
 Reference platform: Ubuntu 22.04 LTS or macOS Version 14
 
-Go 1.23: https://go.dev/dl/
+Go 1.24: https://go.dev/dl/
 
 ### Windows
 
@@ -32,49 +32,15 @@ go build -o ./bin/ ./scion/cmd/scion
 ## Prepare SCION test network
 
 ```
-cd $SCION_TESTNET_PATH
-rm -rf logs gen-cache
-mkdir logs gen-cache
-
-go run scion-cryptogen.go topos/tiny4
-```
-
-### On macOS:
-
-```
-for i in {2..31}; do sudo ifconfig lo0 alias 127.0.0.$i up; done
-```
-
-This will add alias IP addresses to the loopback adapter.
-
-To later remove them again:
-
-```
-for i in {2..31}; do sudo ifconfig lo0 alias 127.0.0.$i down; done
-for i in {2..31}; do sudo ifconfig lo0 -alias 127.0.0.$i; done
-```
-
-### On Linux
-
-```
-for i in {2..31}; do sudo ifconfig lo:$i 127.0.0.$i up; done
-```
-
-This will add alias IP addresses to the loopback adapter (assuming your loopback adapter is called `lo`).
-
-To later remove them again:
-
-```
-for i in {2..31}; do sudo ifconfig lo:$i 127.0.0.$i down; done
+sudo go run scion-testnet.go ifconfig topos/tiny4
+go run scion-testnet.go cryptogen topos/tiny4
 ```
 
 
 ## Start SCION test network infrastructure
 
 ```
-cd $SCION_TESTNET_PATH
-sudo killall router control daemon dispatcher 2> /dev/null
-./run-tiny4.sh
+go run scion-testnet.go run topos/tiny4
 ```
 
 
@@ -92,13 +58,22 @@ $SCION_PATH/bin/scion --sciond 127.0.0.19:30255 ping --refresh -c 7 1-ff00:0:112
 In 1st session:
 
 ```
-go run test-server.go -local 1-ff00:0:112,127.0.0.27:31000
+go run test-server.go -local 1-ff00:0:112,127.0.0.28:31000
 ```
 
 In 2nd session:
 
 ```
-go run test-client.go -daemon 127.0.0.19:30255 -local 1-ff00:0:111,127.0.0.19:31000 -remote 1-ff00:0:112,127.0.0.27:31000 -data "abc"
+go run test-client.go -daemon 127.0.0.19:30255 -local 1-ff00:0:111,127.0.0.20:31000 -remote 1-ff00:0:112,127.0.0.28:31000 -data "abc"
+```
+
+
+## Remove SCION test network
+
+```
+Terminate test network with Ctrl+C
+
+sudo go run scion-testnet.go ifconfig -c topos/tiny4
 ```
 
 
@@ -110,58 +85,24 @@ To use the larger [default test topology](https://github.com/scionproto/scion/bl
 ### Prepare SCION test network
 
 ```
-cd $SCION_TESTNET_PATH
-rm -rf logs gen-cache
-mkdir logs gen-cache
-
-go run scion-cryptogen.go topos/default
+sudo go run scion-testnet.go ifconfig topos/default
+go run scion-testnet.go cryptogen topos/default
 ```
 
-#### On macOS:
-
-Set up and tear down more loopback addresses.
-
-```
-for i in {2..255}; do sudo ifconfig lo0 alias 127.0.0.$i up; done
-```
-
-This will add alias IP addresses to the loopback adapter.
-
-To later remove them again:
-
-```
-for i in {2..255}; do sudo ifconfig lo0 alias 127.0.0.$i down; done
-for i in {2..255}; do sudo ifconfig lo0 -alias 127.0.0.$i; done
-```
-#### On Linux
-
-```
-for i in {2..255}; do sudo ifconfig lo:$i 127.0.0.$i up; done
-```
-
-This will add alias IP addresses to the loopback adapter (assuming your loopback adapter is called `lo`).
-
-To later remove them again:
-
-```
-for i in {2..255}; do sudo ifconfig lo:$i 127.0.0.$i down; done
-```
 
 ### Start SCION test network infrastructure
 
 ```
-cd $SCION_TESTNET_PATH
-sudo killall router control daemon dispatcher 2> /dev/null
-./run-default.sh
+go run scion-testnet.go run topos/default
 ```
 
 
 ### Use SCION test network
 
 ```
-$SCION_PATH/bin/scion --sciond 127.0.0.212:30255 address
-$SCION_PATH/bin/scion --sciond 127.0.0.212:30255 showpaths -r --no-probe 1-ff00:0:133
-$SCION_PATH/bin/scion --sciond 127.0.0.212:30255 ping --refresh -c 7 1-ff00:0:133,127.0.0.1
+$SCION_PATH/bin/scion --sciond '[fd00:f00d:cafe::7f00:54]:30255' address
+$SCION_PATH/bin/scion --sciond '[fd00:f00d:cafe::7f00:54]:30255' showpaths -r --no-probe 1-ff00:0:133
+$SCION_PATH/bin/scion --sciond '[fd00:f00d:cafe::7f00:54]:30255' ping --refresh -c 7 1-ff00:0:133,127.0.0.1
 ```
 
 
@@ -170,11 +111,20 @@ $SCION_PATH/bin/scion --sciond 127.0.0.212:30255 ping --refresh -c 7 1-ff00:0:13
 In 1st session:
 
 ```
-go run test-server.go -local 1-ff00:0:133,127.0.0.148:31000
+go run test-server.go -local 1-ff00:0:133,127.0.0.101:31000
 ```
 
 In 2nd session:
 
 ```
-go run test-client.go -daemon 127.0.0.212:30255 -local 2-ff00:0:222,127.0.0.212:31000 -remote 1-ff00:0:133,127.0.0.148:31000 -data "abc"
+go run test-client.go -daemon '[fd00:f00d:cafe::7f00:54]:30255' -local '2-ff00:0:222,[fd00:f00d:cafe::7f00:55]:31000' -remote 1-ff00:0:133,127.0.0.101:31000 -data "abc"
+```
+
+
+### Remove SCION test network
+
+```
+Terminate test network with Ctrl+C
+
+sudo go run scion-testnet.go ifconfig -c topos/default
 ```

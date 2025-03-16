@@ -3,12 +3,12 @@ id = "br2-ff00_0_222-1"
 config_dir = "topos/default/ASff00_0_222"
 
 [metrics]
-prometheus = "127.0.0.209:30442"
+prometheus = "[fd00:f00d:cafe::7f00:51]:30442"
 
 [features]
 
 [api]
-addr = "127.0.0.209:31142"
+addr = "[fd00:f00d:cafe::7f00:51]:31142"
 
 [log.console]
 level = "debug"
