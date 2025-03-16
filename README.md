@@ -32,6 +32,7 @@ go build -o ./bin/ ./scion/cmd/scion
 ## Prepare SCION test network
 
 ```
+cd $SCION_TESTNET_PATH
 sudo go run scion-testnet.go ifconfig topos/tiny4
 go run scion-testnet.go cryptogen topos/tiny4
 ```
