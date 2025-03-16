@@ -73,9 +73,9 @@ go run test-client.go -daemon 127.0.0.19:30255 -local 1-ff00:0:111,127.0.0.20:31
 
 ## Remove SCION test network
 
-```
 Terminate test network with Ctrl+C
 
+```
 sudo go run scion-testnet.go ifconfig -c topos/tiny4
 ```
 
@@ -129,8 +129,8 @@ go run test-client.go -daemon '[fd00:f00d:cafe::7f00:54]:30255' -local '2-ff00:0
 
 ### Remove SCION test network
 
-```
 Terminate test network with Ctrl+C
 
+```
 sudo go run scion-testnet.go ifconfig -c topos/default
 ```
