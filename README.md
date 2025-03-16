@@ -47,6 +47,8 @@ go run scion-testnet.go run topos/tiny4
 
 ## Use SCION test network
 
+In separate session:
+
 ```
 $SCION_PATH/bin/scion --sciond 127.0.0.19:30255 address
 $SCION_PATH/bin/scion --sciond 127.0.0.19:30255 showpaths -r --no-probe 1-ff00:0:112
@@ -86,6 +88,7 @@ To use the larger [default test topology](https://github.com/scionproto/scion/bl
 ### Prepare SCION test network
 
 ```
+cd $SCION_TESTNET_PATH
 sudo go run scion-testnet.go ifconfig topos/default
 go run scion-testnet.go cryptogen topos/default
 ```
@@ -99,6 +102,8 @@ go run scion-testnet.go run topos/default
 
 
 ### Use SCION test network
+
+In separate session:
 
 ```
 $SCION_PATH/bin/scion --sciond '[fd00:f00d:cafe::7f00:54]:30255' address
