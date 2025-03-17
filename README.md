@@ -33,15 +33,16 @@ go build -o ./bin/ ./scion/cmd/scion
 
 ```
 cd $SCION_TESTNET_PATH
-sudo go run scion-testnet.go ifconfig topos/tiny4
-go run scion-testnet.go cryptogen topos/tiny4
+go build scion-testnet.go
+sudo ./scion-testnet ifconfig topos/tiny4
+./scion-testnet cryptogen topos/tiny4
 ```
 
 
 ## Start SCION test network infrastructure
 
 ```
-go run scion-testnet.go run topos/tiny4
+./scion-testnet run topos/tiny4
 ```
 
 
@@ -76,7 +77,7 @@ go run test-client.go -daemon 127.0.0.19:30255 -local 1-ff00:0:111,127.0.0.20:31
 Terminate test network with Ctrl+C
 
 ```
-sudo go run scion-testnet.go ifconfig -c topos/tiny4
+sudo ./scion-testnet ifconfig -c topos/tiny4
 ```
 
 
@@ -89,15 +90,15 @@ To use the larger [default test topology](https://github.com/scionproto/scion/bl
 
 ```
 cd $SCION_TESTNET_PATH
-sudo go run scion-testnet.go ifconfig topos/default
-go run scion-testnet.go cryptogen topos/default
+sudo ./scion-testnet ifconfig topos/default
+./scion-testnet cryptogen topos/default
 ```
 
 
 ### Start SCION test network infrastructure
 
 ```
-go run scion-testnet.go run topos/default
+./scion-testnet run topos/default
 ```
 
 
@@ -132,5 +133,5 @@ go run test-client.go -daemon '[fd00:f00d:cafe::7f00:54]:30255' -local '2-ff00:0
 Terminate test network with Ctrl+C
 
 ```
-sudo go run scion-testnet.go ifconfig -c topos/default
+sudo ./scion-testnet ifconfig -c topos/default
 ```
