@@ -3,7 +3,10 @@ package main
 import (
 	"bufio"
 	"crypto/rand"
+	"crypto/rsa"
+	"crypto/x509"
 	"encoding/base64"
+	"encoding/pem"
 	"flag"
 	"fmt"
 	"net"
@@ -14,6 +17,7 @@ import (
 	"runtime"
 	"strings"
 	"syscall"
+	"time"
 
 	"github.com/scionproto/scion/scion-pki/testcrypto"
 )
@@ -389,6 +393,8 @@ func cryptogenCommand(args []string) {
 	genDir := cryptoFlags.Arg(0)
 	trcDir := filepath.Join(genDir, "trcs")
 	topoFile := filepath.Join(genDir, "topology.topo")
+	tlsCrt := filepath.Join(genDir, "tls.crt")
+	tlsKey := filepath.Join(genDir, "tls.key")
 
 	var cryptoPaths []string
 
@@ -397,6 +403,9 @@ func cryptogenCommand(args []string) {
 		_ = os.RemoveAll(p)
 	}
 	cryptoPaths = nil
+
+	_ = os.Remove(tlsCrt)
+	_ = os.Remove(tlsKey)
 
 	if *clean {
 		fmt.Printf("Cleaned crypto material in %s\n", genDir)
@@ -433,6 +442,28 @@ func cryptogenCommand(args []string) {
 			genMasterKey(filepath.Join(p, "master1.key"))
 		}
 	}
+
+	now := time.Now().UTC()
+	key, _ := rsa.GenerateKey(rand.Reader, 2048)
+	template := x509.Certificate{
+		NotBefore:   now,
+		NotAfter:    now.AddDate(1, 0, 0), // Valid for 1 year
+		KeyUsage:    x509.KeyUsageKeyEncipherment | x509.KeyUsageDigitalSignature,
+		ExtKeyUsage: []x509.ExtKeyUsage{x509.ExtKeyUsageServerAuth},
+	}
+	crt, _ := x509.CreateCertificate(
+		rand.Reader,
+		&template,
+		&template,
+		&key.PublicKey,
+		key,
+	)
+	crtf, _ := os.Create(tlsCrt)
+	pem.Encode(crtf, &pem.Block{Type: "CERTIFICATE", Bytes: crt})
+	crtf.Close()
+	keyf, _ := os.Create(tlsKey)
+	pem.Encode(keyf, &pem.Block{Type: "RSA PRIVATE KEY", Bytes: x509.MarshalPKCS1PrivateKey(key)})
+	keyf.Close()
 
 	fmt.Printf("Generated crypto material in %s\n", genDir)
 }
