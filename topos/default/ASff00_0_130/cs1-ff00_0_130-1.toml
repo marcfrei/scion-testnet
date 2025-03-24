@@ -29,3 +29,9 @@ mode = "in-process"
 
 [log.console]
 level = "debug"
+
+[drkey.level1_db]
+connection = "gen-cache/cs1-ff00_0_130-1.drkey_level1.db"
+
+[drkey.secret_value_db]
+connection = "gen-cache/cs1-ff00_0_130-1.secret_value.db"

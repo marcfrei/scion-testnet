@@ -24,5 +24,8 @@ prometheus = "127.0.0.86:30455"
 [api]
 addr = "127.0.0.86:30955"
 
+[drkey_level2_db]
+connection = "gen-cache/sd1-ff00_0_121.drkey_level2.db"
+
 [log.console]
 level = "debug"
